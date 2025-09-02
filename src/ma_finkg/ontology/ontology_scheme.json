@@ -1,0 +1,91 @@
+{
+  "entities": {
+    "Action": ["ACQUISITION", "acquired", "merger"],
+    "BusinessUnit": ["coal mining business and operations", "Daiichi Sankyo tivantinib program", "bank holding"],
+    "Company": ["Green River Collieries , LLC ( Green River )", "Boeing", "SoftBank"],
+    "Date": ["April 2 , 2012", "March 23 , 2008", "January 2010"],
+    "Designation": ["financial consultant", "Chairman of the Board", "Senior Vice President"],
+    "FinancialEntity": ["notional amount of interest rate swap contracts", "cash flow hedges", "MVDDS licenses"],
+    "GeopoliticalEntity": ["United Kingdom", "US", "California"],
+    "Location": ["Webster", "Hopkins", "Florida"],
+    "Money": ["$ 41.7 million", "$ 800 million", "$50B"],
+    "Person": ["Mr. Theobald", "Kevin M. Charlton", "Douglas E. Wenger"],
+    "Product": ["Ravicti drug product", "LEAP engines", "Decorative ceiling fans"],
+    "Quantity": ["815", "73,500 square feet", "three-year"],
+    "Sector": ["specialty pharmaceutical distributors", "bank holding", "pharmaceutical distributors"]
+  },
+  "relations": {
+    "ActionBuy": {
+      "head_types": ["Company", "Person"],
+      "tail_types": ["Company", "FinancialEntity", "Product", "BusinessUnit"]
+    },
+    "Actionin": {
+      "head_types": ["Action"],
+      "tail_types": ["Date"]
+    },
+    "ActionSell": {
+      "head_types": ["Company", "Person"],
+      "tail_types": ["Company", "FinancialEntity", "Product", "BusinessUnit"]
+    },
+    "ActionMerge": {
+      "head_types": ["Company"],
+      "tail_types": ["Company"]
+    },
+    "Actionto": {
+      "head_types": ["Action"],
+      "tail_types": ["Company", "FinancialEntity", "Product", "BusinessUnit"]
+    },
+    "Constituentof": {
+      "head_types": ["FinancialEntity"],
+      "tail_types": ["FinancialEntity"]
+    },
+    "Designation": {
+      "head_types": ["Person", "Company"],
+      "tail_types": ["Designation"]
+    },
+    "Employeeof": {
+      "head_types": ["Person"],
+      "tail_types": ["Company"]
+    },
+    "Locatedin": {
+      "head_types": ["Company", "Location", "GeopoliticalEntity", "BusinessUnit", "Money", "Quantity"],
+      "tail_types": ["Location", "GeopoliticalEntity"]
+    },
+    "Productof": {
+      "head_types": ["Product"],
+      "tail_types": ["Company"]
+    },
+    "Propertyof": {
+      "head_types": ["Action", "FinancialEntity", "BusinessUnit"],
+      "tail_types": ["Company", "FinancialEntity", "BusinessUnit", "Product", "Person"]
+    },
+    "Quantity": {
+      "head_types": ["FinancialEntity", "BusinessUnit", "Product"],
+      "tail_types": ["Quantity"]
+    },
+    "Sector": {
+      "head_types": ["Company"],
+      "tail_types": ["Sector"]
+    },
+    "Subsidiaryof": {
+      "head_types": ["Company"],
+      "tail_types": ["Company"]
+    },
+    "Value": {
+      "head_types": ["FinancialEntity", "BusinessUnit", "Product", "Company"],
+      "tail_types": ["Money", "Quantity"]
+    },
+    "ValueChangeDecreaseby": {
+      "head_types": ["FinancialEntity", "BusinessUnit"],
+      "tail_types": ["Money", "Quantity"]
+    },
+    "ValueChangeIncreaseby": {
+      "head_types": ["FinancialEntity", "BusinessUnit"],
+      "tail_types": ["Money", "Quantity"]
+    },
+    "Valuein": {
+      "head_types": ["Money", "Quantity"],
+      "tail_types": ["Date", "Location", "GeopoliticalEntity"]
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "entities": {
+    "DATE": [],
+    "GOV_AGY": [],
+    "GPE": [],
+    "MONEY": [],
+    "ORG": [],
+    "PERSON": [],
+    "TITLE": [],
+    "UNIV": []
+  },
+  "relations": {
+    "acquired_on": {
+      "head_types": ["ORG"],
+      "tail_types": ["DATE"]
+    },
+    "formed_on": {
+      "head_types": ["ORG"],
+      "tail_types": ["DATE"]
+    },
+    "formed_in": {
+      "head_types": ["ORG"],
+      "tail_types": ["GPE"]
+    },
+    "headquartered_in": {
+      "head_types": ["ORG"],
+      "tail_types": ["GPE"]
+    },
+    "operations_in": {
+      "head_types": ["ORG"],
+      "tail_types": ["GPE"]
+    },
+    "cost_of": {
+      "head_types": ["ORG"],
+      "tail_types": ["MONEY"]
+    },
+    "loss_of": {
+      "head_types": ["ORG"],
+      "tail_types": ["MONEY"]
+    },
+    "profit_of": {
+      "head_types": ["ORG"],
+      "tail_types": ["MONEY"]
+    },
+    "revenue_of": {
+      "head_types": ["ORG"],
+      "tail_types": ["MONEY"]
+    },
+    "acquired_by": {
+      "head_types": ["ORG"],
+      "tail_types": ["ORG"]
+    },
+    "agreement_with": {
+      "head_types": ["ORG"],
+      "tail_types": ["ORG"]
+    },
+    "shares_of": {
+      "head_types": ["ORG"],
+      "tail_types": ["ORG"]
+    },
+    "subsidiary_of": {
+      "head_types": ["ORG"],
+      "tail_types": ["ORG"]
+    },
+    "member_of": {
+      "head_types": ["PERSON"],
+      "tail_types": ["GOV_AGY", "ORG", "UNIV"]
+    },
+    "employee_of": {
+      "head_types": ["PERSON"],
+      "tail_types": ["ORG", "UNIV"]
+    },
+    "founder_of": {
+      "head_types": ["PERSON"],
+      "tail_types": ["ORG"]
+    },
+    "title": {
+      "head_types": ["PERSON"],
+      "tail_types": ["TITLE"]
+    },
+    "attended": {
+      "head_types": ["PERSON"],
+      "tail_types": ["UNIV"]
+    }
+  }
+}

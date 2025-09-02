@@ -1,0 +1,91 @@
+{
+  "entities": {
+    "Action": [],
+    "BusinessUnit": [],
+    "Company": [],
+    "Date": [],
+    "Designation": [],
+    "FinancialEntity": [],
+    "GeopoliticalEntity": [],
+    "Location": [],
+    "Money": [],
+    "Person": [],
+    "Product": [],
+    "Quantity": [],
+    "Sector": []
+  },
+  "relations": {
+    "ActionBuy": {
+      "head_types": ["Company", "Person"],
+      "tail_types": ["Company", "FinancialEntity", "Product", "BusinessUnit"]
+    },
+    "Actionin": {
+      "head_types": ["Action"],
+      "tail_types": ["Date"]
+    },
+    "ActionSell": {
+      "head_types": ["Company", "Person"],
+      "tail_types": ["Company", "FinancialEntity", "Product", "BusinessUnit"]
+    },
+    "ActionMerge": {
+      "head_types": ["Company"],
+      "tail_types": ["Company"]
+    },
+    "Actionto": {
+      "head_types": ["Action"],
+      "tail_types": ["Company", "FinancialEntity", "Product", "BusinessUnit"]
+    },
+    "Constituentof": {
+      "head_types": ["FinancialEntity"],
+      "tail_types": ["FinancialEntity"]
+    },
+    "Designation": {
+      "head_types": ["Person", "Company"],
+      "tail_types": ["Designation"]
+    },
+    "Employeeof": {
+      "head_types": ["Person"],
+      "tail_types": ["Company"]
+    },
+    "Locatedin": {
+      "head_types": ["Company"],
+      "tail_types": ["Location"]
+    },
+    "Productof": {
+      "head_types": ["Product"],
+      "tail_types": ["Company"]
+    },
+    "Propertyof": {
+      "head_types": ["Company", "FinancialEntity", "BusinessUnit"],
+      "tail_types": ["Company", "FinancialEntity", "BusinessUnit"]
+    },
+    "Quantity": {
+      "head_types": ["FinancialEntity", "BusinessUnit", "Product"],
+      "tail_types": ["Quantity"]
+    },
+    "Sector": {
+      "head_types": ["Company"],
+      "tail_types": ["Sector"]
+    },
+    "Subsidiaryof": {
+      "head_types": ["Company"],
+      "tail_types": ["Company"]
+    },
+    "Value": {
+      "head_types": ["FinancialEntity", "BusinessUnit", "Product", "Company"],
+      "tail_types": ["Money"]
+    },
+    "ValueChangeDecreaseby": {
+      "head_types": ["FinancialEntity", "BusinessUnit"],
+      "tail_types": ["Money", "Quantity"]
+    },
+    "ValueChangeIncreaseby": {
+      "head_types": ["FinancialEntity", "BusinessUnit"],
+      "tail_types": ["Money", "Quantity"]
+    },
+    "Valuein": {
+      "head_types": ["Money", "Quantity"],
+      "tail_types": ["Date"]
+    }
+  }
+}

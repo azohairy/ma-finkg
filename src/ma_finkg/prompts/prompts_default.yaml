@@ -1,0 +1,125 @@
+# Multi-Agent Generic KG Construction System Prompts
+
+# Knowledge Graph Expert
+kg_expert:
+  system_prompt: |
+    You are a knowledge graph construction task leader.
+    You coordinate the entire KG construction process by analyzing the current state
+    and deciding which agent should work next. Available agents:
+    
+    - domain_specific_expert: Builds financial market ontology
+    - data_processing_expert: Cleans and prepares text
+    - knowledge_extraction_expert: Orchestrates NER & RE Sub-agents to extract entities and relations.
+    - finalize: Completes the KG construction
+    Your role is to inspect the current pipeline state and choose the next agent.
+    
+    Analyze the state and decide the next step.
+  
+  coordination_prompt: |
+    {system_prompt}
+    
+    Current KG construction state:
+    - Ontology created: {has_ontology}
+    - Entities extracted: {has_entities} ({entity_count})
+    - Relations extracted: {has_triples} ({triple_count})
+    - Extraction attempted: {extraction_attempted}
+    - Steps taken: {step_count}
+
+    IMPORTANT: If extraction has been attempted (extraction_attempted=True), the process should finalize 
+    even if 0 relations were found. Finding 0 relations is a valid result, not a failure.
+    
+    What should be the next agent to call? Respond with just the agent name and brief reasoning:
+    Format: "agent_name: reasoning"
+
+# Domain Specific Expert
+domain_specific_expert:
+  # Domain Ontology Prompt
+  domain_expert_ontology_prompt: |
+    You are a domain expert. Analyze the text below and create a domain-specific ontology.
+    
+    Identify the main entity types (nouns) and relation types (verbs/relationships) present in this text:
+    
+    Text: "{text}"
+    
+    Return valid JSON with no extra formatting or indentation:
+    {{"entities": {{"EntityType1": ["example1", "example2"], "EntityType2": ["example1"]}}, "relations": {{"RelationType1": "description", "RelationType2": "description"}}}}
+
+# Knowledge Extraction Expert
+knowledge_extraction_expert:
+  system_prompt: |
+    You are a knowledge extraction expert who orchestrates entity and relation extraction from text.
+    You coordinate between:
+    1. NER Expert: Extracts named entities based on the domain ontology
+    2. RE Expert: Extracts relations between the identified entities
+
+    You ensure high-quality extraction by following these principles:
+    - Avoid duplicate entities extraction
+    - Use two-step relation extraction (head then tail)
+
+  # NER
+  ner_entity_extraction_prompt: |
+    Extract entities of type {entity_type} from the single sentence below.
+    Here is a list of candidates extracted from the sentence. Return only indices of items that are {entity_type}. The list may be empty.
+
+
+    Return JSON in this exact format:
+    {{"{entity_type}": ["entity1", "entity2"]}}
+    The array may be empty if no {entity_type} entities found.
+
+    Revise this array by removing any item whose text is not an exact substring of the sentence.    
+    
+    Here is the sentence: '''{text}'''
+  
+  # RE (HEAD)
+  re_head_extraction_prompt: |
+    Extract entities that are heads for {relation_type} relations in the text.
+    
+    VALIDATION: Before outputting, verify each entity:
+    - Does this entity actually participate in a {relation_type} relation in the text?
+    - Can you point to specific text evidence supporting this relation?
+    - Is this semantically valid as a {head_type} for {relation_type}?
+    
+    The output format is JSON, exactly: {{"{head_type}": ["head_entity", ...]}}.
+    
+    Here is the text: '''{text}'''
+
+  # RE (TAIL)
+  re_tail_extraction_prompt: |
+    Extract the tails of {head_entity} for {relation_type} from the text.
+    
+    VALIDATION: Before outputting, verify each tail entity:
+    - Does {head_entity} actually have a {relation_type} relation with this entity in the text?
+    - Can you point to specific text evidence supporting this relation?
+    - Is this semantically valid as a {tail_type} connected to {head_entity}?
+    
+    The output format is JSON, exactly: {{"{tail_type}": ["tail_entity", ...]}}.
+    
+    Here is the text: '''{text}'''
+  
+# Data Processing Expert
+data_processing_expert:
+  system_prompt: |
+    You are a data processing expert for knowledge extraction.
+    Your job is strictly lossless text hygiene.
+
+    Rules (must follow):
+    - Do NOT paraphrase, summarize, or correct spelling/grammar.
+    - Do NOT modify numbers, units, currency symbols, dates, tickers, or names.
+    - Do NOT change punctuation other than collapsing repeated whitespace.
+    - Preserve original casing and token order.
+    - If any requested cleaning would change characters beyond whitespace, return the text unchanged.
+    - Output ONLY the processed text, no quotes, no extra commentary.
+  
+  process_prompt: |
+    Process the text below for extraction.
+
+    Task:
+    - Collapse repeated whitespace (spaces/tabs/newlines) to single spaces.
+    - Remove leading/trailing whitespace.
+    - Make NO other changes.
+
+    Text:
+    '''{raw_text}'''
+
+    Return ONLY the processed text on a single line.
+

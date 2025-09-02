@@ -1,0 +1,21 @@
+{
+  "entities": {
+    "PER": ["Tim Pawlenty", "Barack Obama", "Joe Buck"],
+    "ORG": ["Sony", "Apple", "Microsoft"],
+    "LOC": ["Minnesota", "New York", "California"]
+  },
+  "relations": {
+    "/location/administrative_division/country": {"head_types": ["LOC"], "tail_types": ["LOC"]},
+    "/people/person/children": {"head_types": ["PER"], "tail_types": ["PER"]},
+    "/people/person/place_of_birth": {"head_types": ["PER"], "tail_types": ["LOC"]},
+    "/location/country/capital": {"head_types": ["LOC"], "tail_types": ["LOC"]},
+    "/location/location/contains": {"head_types": ["LOC"], "tail_types": ["LOC"]},
+    "/people/person/place_lived": {"head_types": ["PER"], "tail_types": ["LOC"]},
+    "/location/neighborhood/neighborhood_of": {"head_types": ["LOC"], "tail_types": ["LOC"]},
+    "/people/deceased_person/place_of_death": {"head_types": ["PER"], "tail_types": ["LOC"]},
+    "/location/country/administrative_divisions": {"head_types": ["LOC"], "tail_types": ["LOC"]},
+    "/business/person/company": {"head_types": ["PER"], "tail_types": ["ORG"]},
+    "/business/company/founders": {"head_types": ["ORG"], "tail_types": ["PER"]},
+    "/people/person/nationality": {"head_types": ["PER"], "tail_types": ["LOC"]}
+  }
+}

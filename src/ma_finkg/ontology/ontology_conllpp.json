@@ -1,0 +1,9 @@
+{
+  "entities": {
+    "PER": ["Catherine Borghi", "Katharina Gutensohn", "Woolmer"],
+    "ORG": ["Cliftonville", "Rugby Union", "Sheffield United"],
+    "LOC": ["Bangkok", "Beijing", "Russia"],
+    "MISC": ["World Cup", "Western Conference", "Scottish"]
+  },
+  "relations": {}
+}

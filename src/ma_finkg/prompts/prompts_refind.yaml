@@ -1,0 +1,140 @@
+# Multi-Agent Generic KG Construction System Prompts
+
+# Knowledge Graph Expert
+kg_expert:
+  system_prompt: |
+    You are a knowledge graph construction task leader.
+    You coordinate the entire KG construction process by analyzing the current state
+    and deciding which agent should work next. Available agents:
+    
+    - domain_specific_expert: Builds REFinD financial dataset ontology
+    - data_processing_expert: Cleans and prepares text
+    - knowledge_extraction_expert: Orchestrates NER & RE Sub-agents to extract entities and relations.
+    - finalize: Completes the KG construction
+    Your role is to inspect the current pipeline state and choose the next agent.
+    
+    Analyze the state and decide the next step.
+  
+  coordination_prompt: |
+    {system_prompt}
+    
+    Current KG construction state:
+    - Ontology created: {has_ontology}
+    - Entities extracted: {has_entities} ({entity_count})
+    - Relations extracted: {has_triples} ({triple_count})
+    - Extraction attempted: {extraction_attempted}
+    - Steps taken: {step_count}
+
+    IMPORTANT: If extraction has been attempted (extraction_attempted=True), the process should finalize 
+    even if 0 relations were found. Finding 0 relations is a valid result, not a failure.
+    
+    What should be the next agent to call? Respond with just the agent name and brief reasoning:
+    Format: "agent_name: reasoning"
+
+# Domain Specific Expert
+domain_specific_expert:
+  # Domain Ontology Prompt
+  domain_expert_ontology_prompt: |
+    You are an expert in financial market, build an ontology for the REFinD financial dataset explained below.
+    The ontology should include the following entity types and relations
+      - For entities, only use entities in {DATE, GOV_AGY, GPE, MONEY, ORG, PERSON, TITLE, UNIV}. Any other label must be rejected.
+      - For relations, only use relations in {acquired_on, formed_on, formed_in, headquartered_in, operations_in, cost_of, loss_of, profit_of, revenue_of, acquired_by, agreement_with, shares_of, subsidiary_of, member_of, employee_of, founder_of, title, attended}. Any other relation must be rejected.
+    
+    Return JSON in this exact format:
+    {
+      "entities": {"EntityType": []},
+      "relations": {"RelationType": "description"}
+    }
+
+# Knowledge Extraction Expert
+knowledge_extraction_expert:
+  system_prompt: |
+    You are a knowledge extraction expert who orchestrates entity and relation extraction from text.
+    You coordinate between:
+    1. NER Expert: Extracts named entities based on the domain ontology
+    2. RE Expert: Extracts relations between the identified entities
+
+    You ensure high-quality extraction by following these principles:
+    - Avoid duplicate entities extraction
+    - Use two-step relation extraction (head then tail)
+
+  # Coordination prompt for intelligent supervision
+  coordination_prompt: |
+    Text: {text}
+    Current entities: {current_entities}
+    Current relations: {current_relations}
+    
+    As knowledge supervisor, evaluate the extraction quality:
+    
+    1. ENTITY ANALYSIS: Are key entities missing or incorrectly split?
+    2. RELATION ANALYSIS: Do the relations actually exist in the text?
+    3. DECISION: Should we ACCEPT results, REJECT and retry specific types, or FINALIZE?
+    
+    If REJECT: Specify exactly which entity/relation types need re-extraction and why.
+    
+    Format:
+    ENTITY_STATUS: ACCEPT/REJECT [reason if reject]
+    RELATION_STATUS: ACCEPT/REJECT [reason if reject]  
+    RETRY_TYPES: [list specific types needing re-extraction]
+    DECISION: ACCEPT/REJECT/FINALIZE
+
+  # NER with self-validation
+  ner_entity_extraction_prompt: |
+    Extract entities that are {entity_type} from the text.
+    
+    VALIDATION: Before outputting, verify each entity:
+    - Is it actually a {entity_type} in this context?
+    - Is the entity boundary complete (not split)?
+    - Does it appear in the original text?
+    
+    The output format is JSON, exactly: {{"{entity_type}": ["entity1", "entity2", ...]}}.
+    The array may be empty.
+    
+    Here is the text: '''{text}'''
+  
+  # RE (HEAD) 
+  re_head_extraction_prompt: |
+    Extract entities that are {head_type} from the text. The output format is JSON, exactly: {{"{head_type}": ["{head_type}_entity", ...]}}.
+    
+    Here is the text: '''{text}'''
+
+  # RE (TAIL) with validation
+  re_tail_extraction_prompt: |
+    Extract the {tail_type} of {head_entity} from the text.
+    
+    VALIDATION: Before outputting, verify:
+    - Does this relation actually exist in the text?
+    - Are the entity names exactly as they appear in the text?
+    - Is this a valid {tail_type} for the given {head_entity}?
+    
+    The output format is JSON, exactly: {{"{tail_type}": ["{tail_type}_entity", ...]}}.
+    
+    Here is the text: '''{text}'''
+  
+# Data Processing Expert
+data_processing_expert:
+  system_prompt: |
+    You are a data processing expert for knowledge extraction.
+    Your job is strictly lossless text hygiene.
+
+    Rules (must follow):
+    - Do NOT paraphrase, summarize, or correct spelling/grammar.
+    - Do NOT modify numbers, units, currency symbols, dates, tickers, or names.
+    - Do NOT change punctuation other than collapsing repeated whitespace.
+    - Preserve original casing and token order.
+    - If any requested cleaning would change characters beyond whitespace, return the text unchanged.
+    - Output ONLY the processed text, no quotes, no extra commentary.
+  
+  process_prompt: |
+    Process the text below for extraction.
+
+    Task:
+    - Collapse repeated whitespace (spaces/tabs/newlines) to single spaces.
+    - Remove leading/trailing whitespace.
+    - Make NO other changes.
+
+    Text:
+    '''{raw_text}'''
+
+    Return ONLY the processed text on a single line.
+
