@@ -1,4 +1,4 @@
-# MA-FINKG: Multi-Agent Framework for Financial Knowledge Graph Construction from Unstructured Text
+# MA-FinKG: Multi-Agent Framework for Financial Knowledge Graph Construction from Unstructured Text
 
 A multi-agent system based on LangGraph for constructing Knowledge Graphs from financial text documents. The system uses specialized agents to coordinate domain-specific ontology building, text processing, and knowledge extraction.
 
@@ -118,20 +118,3 @@ python -m ma_finkg --version
 ## License
 
 MIT License
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Citation
-
-If you use this software in your research, please cite:
-
-```bibtex
-@software{ma-finkg,
-  title={MA-FinKG: Multi-Agent System for Financial Knowledge Graph Construction for Text},
-  author={Abdel-Rahman Elzohairy},
-  version={0.1.5},
-  year={2025}
-}
-```
