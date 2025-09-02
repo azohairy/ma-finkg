@@ -47,7 +47,7 @@ print("Entities:", result.entities)
 print("Relations:", result.triples)
 ```
 
-## Available Ontologies
+## Available Datasets
 
 ### FIRE
 Financial dataset ontology with comprehensive financial entities and relations.
@@ -66,7 +66,7 @@ General-purpose ontology based on the NYT dataset.
 ### Default (Default)
 Generic financial ontology used when no specific dataset is specified.
 
-### Other Ontologies
+### Other Datasets
 - **CoNLLpp**: Named Entity Recognition dataset ontology
 - **REFinD**: ReFiNED dataset ontology
 
